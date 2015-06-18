@@ -5,6 +5,8 @@ package com.searcher.esteban.restapi.utils;
  */
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.searcher.esteban.restapi.R;
@@ -38,7 +40,6 @@ public class EncryptionHelper {
         return eh;
     }
 
-
     private void getKey()
             throws IOException {
         try {
@@ -48,7 +49,6 @@ public class EncryptionHelper {
             localInputStream.close();
             key = arrayOfByte;
             Log.d("EncryptionHelper.getKey", "key = " + key.toString());
-            return;
         } catch (IOException localIOException) {
             Log.e("EncryptionHelper.getKey", "IO error", localIOException);
             throw localIOException;
@@ -56,7 +56,8 @@ public class EncryptionHelper {
     }
 
 
-    public String decrypt(String paramString) {
+    @NonNull
+    public String decrypt(@Nullable String paramString) {
         String str = "";
         if (paramString != null) {
 
@@ -65,7 +66,8 @@ public class EncryptionHelper {
         return str;
     }
 
-    public String encrypt(String paramString) {
+    @Nullable
+    public String encrypt(@Nullable String paramString) {
         String str = "";
         if (paramString != null) {
             str = this.des.encrypt(paramString);

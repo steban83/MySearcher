@@ -4,6 +4,8 @@ package com.searcher.esteban.restapi.utils;
  * Created by ealcalde on 16/06/2015.
  */
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
@@ -20,6 +22,7 @@ import javax.crypto.spec.IvParameterSpec;
 
 public class DesEncrypter {
     private static final String ERROR_MSG = "<Error>66</Error><TextoAviso>Error en servicio SOAP</TextoAviso>";
+    @NonNull
     private static String algorithm = "DESede/CBC/PKCS5Padding";
     Cipher dcipher;
     Cipher ecipher;
@@ -32,49 +35,34 @@ public class DesEncrypter {
             try {
                 this.ecipher.init(1, paramSecretKey, localIvParameterSpec);
                 this.dcipher.init(2, paramSecretKey, localIvParameterSpec);
-                return;
             } catch (InvalidAlgorithmParameterException exception) {
                 exception.printStackTrace();
-                return;
             }
-        } catch (NoSuchPaddingException exception) {
-            exception.printStackTrace();
-            return;
-        } catch (NoSuchAlgorithmException exception) {
-            exception.printStackTrace();
-            return;
-        } catch (InvalidKeyException exception) {
+        } catch (@NonNull NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException exception) {
             exception.printStackTrace();
         }
     }
 
+    @NonNull
     private byte[] getIvBytes() {
         return new byte[]{0, 1, 2, 3, 4, 5, 6, 7};
     }
 
-    public String decrypt(String paramString) {
+    @NonNull
+    public String decrypt(@NonNull String paramString) {
         try {
             return new String(this.dcipher.doFinal(Base64.decode(paramString.getBytes(), 0)), "UTF-8");
-        } catch (BadPaddingException exception) {
+        } catch (@NonNull BadPaddingException | IllegalBlockSizeException | UnsupportedEncodingException exception) {
             exception.printStackTrace();
-            return "<Error>66</Error><TextoAviso>Error en servicio SOAP</TextoAviso>";
-        } catch (IllegalBlockSizeException exception) {
-            exception.printStackTrace();
-            return "<Error>66</Error><TextoAviso>Error en servicio SOAP</TextoAviso>";
-        } catch (UnsupportedEncodingException exception) {
-            exception.printStackTrace();
+            return ERROR_MSG;
         }
-        return "<Error>66</Error><TextoAviso>Error en servicio SOAP</TextoAviso>";
     }
 
-    public String encrypt(String paramString) {
+    @Nullable
+    public String encrypt(@NonNull String paramString) {
         try {
             return new String(Base64.encode(this.ecipher.doFinal(paramString.getBytes("ASCII")), 0)).replaceAll("\n", "");
-        } catch (UnsupportedEncodingException exception) {
-            return null;
-        } catch (IllegalBlockSizeException exception) {
-            return null;
-        } catch (BadPaddingException exception) {
+        } catch (UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException exception) {
             return null;
         }
     }

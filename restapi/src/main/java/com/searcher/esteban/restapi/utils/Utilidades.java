@@ -6,6 +6,8 @@ package com.searcher.esteban.restapi.utils;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.searcher.esteban.restapi.model.TypeResult;
 
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Utilidades {
-    public static int findHomeinArray(ArrayList<TypeResult> paramArrayList, String paramString, Context paramContext) {
+    public static int findHomeinArray(@NonNull ArrayList<TypeResult> paramArrayList, String paramString, @NonNull Context paramContext) {
         paramString = getSettingsSharedPreferences(paramString, paramContext);
         if (paramString != null) {
             int i = 0;
@@ -29,12 +31,16 @@ public class Utilidades {
         return 0;
     }
 
-
-    public static String getLocalObject(String param) {
+    @NonNull
+    public static String getLocalObject() {
         return "alutim" + Utilidades.getDateFormatted() + "searcher";
     }
 
-    public static int findLocationinArray(ArrayList<TypeResult> paramArrayList, String paramString, Context paramContext) {
+    public static String getEncryptLocalObject(Context context) {
+        return EncryptionHelper.getInstance(context).encrypt(getLocalObject());
+    }
+
+    public static int findLocationinArray(@NonNull ArrayList<TypeResult> paramArrayList, String paramString, @NonNull Context paramContext) {
         paramString = getSettingsSharedPreferences(paramString, paramContext);
         if (paramString != null) {
             int i = 0;
@@ -50,19 +56,15 @@ public class Utilidades {
 
     public static String formatearConComaPeriodo(long paramLong, int paramInt1, int paramInt2) {
         DecimalFormat localDecimalFormat = new DecimalFormat();
-        if ((localDecimalFormat instanceof DecimalFormat)) {
-            ((DecimalFormat) localDecimalFormat).setMaximumFractionDigits(paramInt2);
-            ((DecimalFormat) localDecimalFormat).setMinimumIntegerDigits(paramInt1);
-        }
+        localDecimalFormat.setMaximumFractionDigits(paramInt2);
+        localDecimalFormat.setMinimumIntegerDigits(paramInt1);
         return localDecimalFormat.format(paramLong);
     }
 
     public static String formatearSoloConComa(Float paramFloat, int paramInt1, int paramInt2) {
         DecimalFormat localDecimalFormat = new DecimalFormat();
-        if ((localDecimalFormat instanceof DecimalFormat)) {
-            ((DecimalFormat) localDecimalFormat).setMaximumFractionDigits(paramInt2);
-            ((DecimalFormat) localDecimalFormat).setMinimumIntegerDigits(paramInt1);
-        }
+        localDecimalFormat.setMaximumFractionDigits(paramInt2);
+        localDecimalFormat.setMinimumIntegerDigits(paramInt1);
         localDecimalFormat.setGroupingUsed(false);
         return localDecimalFormat.format(paramFloat);
     }
@@ -98,14 +100,15 @@ public class Utilidades {
     }*/
 
 
-    public static String getSettingsSharedPreferences(String paramString, Context paramContext) {
+    @Nullable
+    public static String getSettingsSharedPreferences(String paramString, @NonNull Context paramContext) {
         return PreferenceManager.getDefaultSharedPreferences(paramContext).getString(paramString, null);
     }
 
-    public static boolean isAllItemsChecked(boolean[] paramArrayOfBoolean) {
+    public static boolean isAllItemsChecked(@NonNull boolean[] paramArrayOfBoolean) {
         boolean result = true;
         for (boolean element : paramArrayOfBoolean) {
-            result &= element;
+            result = element;
             if (!result) {
                 break;
             }
@@ -113,7 +116,7 @@ public class Utilidades {
         return result;
     }
 
-    public static int loadItemCheckedFilter(CharSequence[] paramArrayOfCharSequence, String paramString) {
+    public static int loadItemCheckedFilter(@NonNull CharSequence[] paramArrayOfCharSequence, String paramString) {
         int i = 0;
         while (i < paramArrayOfCharSequence.length) {
             if (paramArrayOfCharSequence[i].equals(paramString)) {

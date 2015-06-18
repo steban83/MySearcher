@@ -5,6 +5,8 @@ package com.searcher.esteban.restapi.service;
  */
 
 
+import android.support.annotation.NonNull;
+
 import com.searcher.esteban.restapi.model.Country;
 
 import java.util.ArrayList;
@@ -19,9 +21,9 @@ import retrofit.http.POST;
  */
 public interface ICountryService {
 
-    public static final String PARAM_FECHAPETICION = "fechaPeticion";
-    public static final String PARAM_TOKEN = "token";
-    public static final String PARAM_LOCALE_USUARIO = "localeUsuario";
+    String PARAM_FECHAPETICION = "fechaPeticion";
+    String PARAM_TOKEN = "token";
+    String PARAM_LOCALE_USUARIO = "localeUsuario";
 
 
     /**
@@ -34,6 +36,7 @@ public interface ICountryService {
      * @return
      * @throws APIException
      */
+    @NonNull
     @FormUrlEncoded
     @POST("/countries")
     Void getCountries(@Field(PARAM_FECHAPETICION) String fechaPeticion,

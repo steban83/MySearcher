@@ -1,5 +1,7 @@
 package com.searcher.esteban.restapi.service;
 
+import android.support.annotation.NonNull;
+
 import com.searcher.esteban.restapi.Settings;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -37,7 +39,7 @@ public class CountryService {
          */
         RequestInterceptor requestInterceptor = new RequestInterceptor() {
             @Override
-            public void intercept(RequestInterceptor.RequestFacade request) {
+            public void intercept(@NonNull RequestInterceptor.RequestFacade request) {
                 request.addHeader("Accept", "application/json");
                 request.addHeader("Content-Type", "application/json");
             }
